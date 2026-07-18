@@ -29,7 +29,7 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 
 **Blocked by:** 1.
 
-- [ ] Browser camera QR scan works on iPhone Safari and Android Chrome
+- [x] Browser camera QR scan works on iPhone Safari and Android Chrome *(verified on iPhone by founder 18 Jul 2026; Android Chrome pending — re-open if it misbehaves)*
 - [x] Both earning-rule types award correctly with tenant-custom N values; per-RM rounds down
 - [x] Wrong PIN cannot award; every award is a ledger row with outlet + staff attribution
 - [x] Phone numbers normalized to E.164 (+60…) at every entry point — `012-345 6789`, `0123456789`, and `+60123456789` all resolve to the same member (tested); existing raw rows migrated
