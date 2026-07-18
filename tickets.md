@@ -4,7 +4,11 @@ Tracer-bullet build roadmap for the Malaysia self-serve membership SaaS. Source 
 
 Work the **frontier**: any ticket whose blockers are all done. Clear context between tickets.
 
-**External clocks — start on day 1, independent of any ticket:** Meta business verification (gates ticket 7's templates), Stripe account activation (gates ticket 10's live mode), lawyer review of DPA + bilingual notices (gates ticket 9's final copy).
+**External clocks — start on day 1, independent of any ticket.** These run on other people's timelines (founder action, not a build session), so fire them early and track them here:
+
+- [ ] Meta business verification started (business.facebook.com → Security Centre) — gates ticket 7's template approval
+- [ ] Stripe account activation started (dashboard.stripe.com → Activate account) — gates ticket 10's live mode
+- [ ] Lawyer engaged for DPA + bilingual notices review (~RM2–5k, the only planned cash spend) — gates ticket 9's final copy
 
 ## 1. Walking skeleton: one tenant, one member, one point
 
@@ -21,11 +25,14 @@ Work the **frontier**: any ticket whose blockers are all done. Clear context bet
 
 **What to build:** A PIN-protected mobile web page per outlet where a cashier scans the member's personal QR with the phone camera and awards points under the tenant's earning rule — one tap for "N points per visit," or a numpad amount for "N points per RM1" (always round down). The member's portal balance updates.
 
+Includes **phone number normalization** — phone is the identity key (`unique (tenant_id, phone)`), and the walking skeleton stores whatever the user typed. Malaysians write the same number as `012-345 6789`, `0123456789`, or `+60123456789`; without normalizing to one canonical form (E.164, `+60…`) at every entry point, one person becomes two members and WhatsApp sends (tickets 7–8) get malformed numbers. Normalize on the portal enrol form and staff entry here, and backfill/migrate the raw values ticket 1 stored.
+
 **Blocked by:** 1.
 
 - [ ] Browser camera QR scan works on iPhone Safari and Android Chrome
 - [ ] Both earning-rule types award correctly with tenant-custom N values; per-RM rounds down
 - [ ] Wrong PIN cannot award; every award is a ledger row with outlet + staff attribution
+- [ ] Phone numbers normalized to E.164 (+60…) at every entry point — `012-345 6789`, `0123456789`, and `+60123456789` all resolve to the same member (tested); existing raw rows migrated
 
 ## 3. Redemption loop
 
