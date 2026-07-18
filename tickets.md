@@ -58,6 +58,8 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 
 **What to build:** The full member experience per spec: hero card (name, points count-up, tier chip, embedded member QR), journey progress bar with ritual copy, rewards grid, transaction history — trilingual (EN default / 中文 / BM) with a visible toggle, long-lived device session.
 
+**Phone input (decided 18 Jul 2026, during ticket 2):** member phone fields use a fixed `+60` prefix with local-number entry (user types `12-345 6789` / `11-2345 6789`), `tel` keyboard, and light client-side Malaysian-mobile validation (`01x`, allowing 011's extra digit). Client validation is UX only — server normalization (`lib/phone.ts`) stays authoritative. MVP accepts Malaysian mobiles exclusively; international numbers are on the spec's deferred list (§9).
+
 **Blocked by:** 3, 4.
 
 - [ ] All member-facing strings exist in all three languages; toggle persists per device

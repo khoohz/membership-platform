@@ -45,7 +45,7 @@ Next.js + Supabase (Postgres, RLS multi-tenancy, SG region) + Vercel. One points
 
 ## 9. Explicitly deferred (V2+)
 
-Marketing broadcasts + tenant WABA/Embedded Signup · AI layer (assistant, campaign drafts, CSV import mapping) · advanced analytics beyond the retention panel (cohort curves, RFM segments, campaign attribution) · custom domains · >3 outlets & deep multi-location · theme gallery beyond 3 + widget customization · POS integrations · BM/中文 admin UI · done-for-you setup (paid add-on) · printed table-tent packs (paid add-on) · bonus-point rules & happy hours · points expiry (urgency lever — needs expiry jobs + notice messages) · refer-a-friend rewards · gifting/online redemption · franchise/reseller model.
+Marketing broadcasts + tenant WABA/Embedded Signup · AI layer (assistant, campaign drafts, CSV import mapping) · advanced analytics beyond the retention panel (cohort curves, RFM segments, campaign attribution) · custom domains · >3 outlets & deep multi-location · theme gallery beyond 3 + widget customization · POS integrations · BM/中文 admin UI · done-for-you setup (paid add-on) · printed table-tent packs (paid add-on) · bonus-point rules & happy hours · points expiry (urgency lever — needs expiry jobs + notice messages) · refer-a-friend rewards · gifting/online redemption · franchise/reseller model · international member phone numbers (MVP is Malaysian mobiles only — fixed +60 prefix at every phone input).
 
 ## 10. Launch sequence & critical path
 
