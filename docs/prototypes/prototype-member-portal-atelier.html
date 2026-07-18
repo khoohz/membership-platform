@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROTOTYPE — Atelier (flagship theme, v2)</title>
+<!--
+  PROTOTYPE — THROWAWAY CODE. Wayfinder T7, second pass.
+  Applies the 8 rules from research-design-essence-T7.md:
+  photo-material card, no emoji (stroke icons), layered depth, real type scale
+  (serif display accent), rich-but-ordered, color discipline, restrained motion,
+  ritual microcopy. Trilingual EN/中文/BM. Redeem = one-time QR sheet.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --porcelain:#F7F5F1; --ink:#17181C; --ink2:#5B5D63;
+  --brand:#0F6B5C; --gold:#C9A24B; --hair:#E8E5DE;
+  --serif:'Fraunces',serif; --sans:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+body{background:var(--porcelain);color:var(--ink);font-family:var(--sans);min-height:100vh}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.wrap{max-width:420px;margin:0 auto;padding:18px 18px 60px;min-height:100vh}
+svg.ic{display:block;flex:none}
+
+/* top */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.tenant{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15.5px;letter-spacing:-.2px}
+.tlogo{width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--hair);display:flex;align-items:center;justify-content:center;color:var(--brand)}
+.langs{display:flex;gap:2px;background:#EDEAE3;border-radius:999px;padding:3px;font-size:11px;font-weight:700}
+.langs button{padding:5px 10px;border-radius:999px;color:#96938B}
+.langs button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(23,24,28,.1)}
+
+/* ===== hero card: full-bleed material ===== */
+.card{
+  position:relative;border-radius:24px;overflow:hidden;color:#FCFBF7;
+  min-height:236px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;
+  box-shadow:0 1px 2px rgba(23,24,28,.18), 0 18px 40px -14px rgba(23,24,28,.45);
+  background:
+    radial-gradient(120% 90% at 85% -10%, rgba(255,214,150,.5), transparent 55%),
+    radial-gradient(90% 70% at 12% 110%, rgba(8,50,42,.85), transparent 70%),
+    radial-gradient(140% 120% at 60% 40%, rgba(22,108,92,.35), transparent 70%),
+    linear-gradient(150deg, #123B33 0%, #0F6B5C 46%, #0A4A3F 100%);
+}
+.card::before{ /* grain — the material */
+  content:'';position:absolute;inset:0;opacity:.16;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+}
+.card::after{ /* sheen sweep */
+  content:'';position:absolute;top:-60%;left:-70%;width:55%;height:220%;transform:rotate(22deg);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
+  animation:sheen 2.6s ease .5s 1 both;pointer-events:none;
+}
+@keyframes sheen{from{left:-70%}to{left:130%}}
+.chead{display:flex;justify-content:space-between;align-items:flex-start;position:relative}
+.cbrand{display:flex;align-items:center;gap:9px}
+.clogo{width:36px;height:36px;border-radius:50%;background:rgba(252,251,247,.14);border:1px solid rgba(252,251,247,.28);
+  backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;color:#FCFBF7}
+.cbn{font-family:var(--serif);font-size:16px;font-weight:600;letter-spacing:.2px}
+.cbs{font-size:9.5px;font-weight:700;letter-spacing:2.2px;opacity:.6;text-transform:uppercase;margin-top:2px}
+.tier{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;letter-spacing:1.8px;
+  padding:6px 12px;border-radius:999px;color:#F4E3BB;background:rgba(23,24,28,.28);
+  border:1px solid rgba(244,227,187,.4);backdrop-filter:blur(6px)}
+.cfoot{display:flex;justify-content:space-between;align-items:flex-end;position:relative}
+.mname{font-size:12.5px;font-weight:600;letter-spacing:.3px;opacity:.8}
+.bal{font-family:var(--serif);font-size:52px;font-weight:500;line-height:.95;letter-spacing:-1.5px;margin-top:6px;font-variant-numeric:tabular-nums}
+.ballbl{font-size:9.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;opacity:.55;margin-top:7px}
+.mqr{background:#FCFBF7;border-radius:14px;padding:8px;line-height:0;box-shadow:0 4px 14px rgba(0,0,0,.28)}
+.qrhint{font-size:9px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;text-align:center;margin-top:6px;opacity:.6}
+
+/* sections */
+.sect{margin-top:26px}
+.slbl{font-size:10px;font-weight:800;letter-spacing:2.6px;text-transform:uppercase;color:#A09C93;margin-bottom:12px}
+
+/* progress */
+.prog{background:#fff;border:1px solid var(--hair);border-radius:20px;padding:18px;
+  box-shadow:0 1px 2px rgba(23,24,28,.04), 0 10px 24px -18px rgba(23,24,28,.25)}
+.pcopy{font-family:var(--serif);font-size:17.5px;font-weight:500;line-height:1.35;letter-spacing:-.1px}
+.pcopy b{color:var(--gold)}
+.pbar{height:8px;border-radius:99px;background:#F0EDE6;overflow:hidden;margin-top:14px}
+.pbar i{display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--brand),#2E8A76 60%,var(--gold));
+  transition:width 1.2s cubic-bezier(.22,.8,.3,1)}
+.prow{display:flex;justify-content:space-between;font-size:10px;font-weight:800;letter-spacing:1.6px;color:#A09C93;margin-top:9px}
+.prow .cur{color:var(--ink)}
+
+/* rewards */
+.rwgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rw{background:#fff;border:1px solid var(--hair);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:10px;
+  box-shadow:0 1px 2px rgba(23,24,28,.04), 0 10px 24px -18px rgba(23,24,28,.22)}
+.rwic{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#F3F0E9,#EBE7DD);color:var(--brand);border:1px solid var(--hair)}
+.rwn{font-size:13.5px;font-weight:700;line-height:1.3;flex:1;letter-spacing:-.1px}
+.rwc{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:800;color:var(--ink2)}
+.rwc svg{color:var(--gold)}
+.rwb{border-radius:999px;padding:9px 0;font-size:12px;font-weight:800;text-align:center;
+  background:var(--ink);color:#FCFBF7;transition:transform .08s;letter-spacing:.2px}
+.rwb:active{transform:scale(.96)}
+.rwb.off{background:#EFECE5;color:#ABA79D;pointer-events:none}
+
+/* history */
+.hist{background:#fff;border:1px solid var(--hair);border-radius:20px;overflow:hidden;
+  box-shadow:0 1px 2px rgba(23,24,28,.04), 0 10px 24px -18px rgba(23,24,28,.22)}
+.hi{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.hi+.hi{border-top:1px solid #F3F1EB}
+.hic{width:34px;height:34px;border-radius:50%;background:#F5F2EC;border:1px solid var(--hair);
+  display:flex;align-items:center;justify-content:center;color:var(--ink2);flex:none}
+.hit{flex:1}.hit b{display:block;font-size:13px;font-weight:700}.hit small{font-size:11px;color:#A09C93}
+.amt{font-weight:800;font-size:13.5px;font-variant-numeric:tabular-nums}
+.amt.plus{color:var(--brand)}.amt.minus{color:#A6653C}
+
+.foot{text-align:center;font-size:10px;color:#B4B0A6;margin-top:28px;line-height:1.7;letter-spacing:.2px}
+
+/* redeem sheet */
+#modal{position:fixed;inset:0;background:rgba(23,24,28,.5);display:none;align-items:flex-end;justify-content:center;z-index:90;backdrop-filter:blur(4px)}
+#modal.on{display:flex}
+.sheet{background:var(--porcelain);color:var(--ink);border-radius:26px 26px 0 0;padding:28px 22px 36px;width:100%;max-width:420px;text-align:center;animation:up .3s cubic-bezier(.22,.8,.3,1)}
+@keyframes up{from{transform:translateY(46px);opacity:0}to{transform:translateY(0);opacity:1}}
+.shlbl{font-size:9.5px;font-weight:800;letter-spacing:2.6px;color:#A09C93;text-transform:uppercase}
+.shname{font-family:var(--serif);font-size:27px;font-weight:600;margin:8px 0 3px;letter-spacing:-.3px}
+.shsub{font-size:12.5px;color:var(--ink2);margin-bottom:18px}
+.shqr{display:inline-block;background:#fff;border:1px solid var(--hair);border-radius:20px;padding:16px;line-height:0;
+  box-shadow:0 1px 2px rgba(23,24,28,.05), 0 14px 30px -16px rgba(23,24,28,.3)}
+.shcd{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:700;margin-top:14px;color:var(--ink2)}
+.shcd b{color:#A6653C;font-variant-numeric:tabular-nums}
+.shcancel{margin-top:16px;font-size:13px;font-weight:700;color:#A09C93;padding:8px 22px}
+
+.tag{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+  font-size:10px;font-weight:800;letter-spacing:1.4px;padding:7px 14px;border-radius:999px;opacity:.85;z-index:80}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="tenant"><span class="tlogo"><svg class="ic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 5.5c0-.8.7-1 .7-1.8M11.5 5.5c0-.8.7-1 .7-1.8"/></svg></span><span>Kopi Corner PJ</span></div>
+    <div class="langs" id="langs"></div>
+  </div>
+
+  <div class="card">
+    <div class="chead">
+      <div class="cbrand">
+        <span class="clogo"><svg class="ic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 5.5c0-.8.7-1 .7-1.8M11.5 5.5c0-.8.7-1 .7-1.8"/></svg></span>
+        <div><div class="cbn">Kopi Corner</div><div class="cbs">Petaling Jaya · Est. 2019</div></div>
+      </div>
+      <span class="tier"><svg class="ic" width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.9L21 9.3l-5.2 4.6 1.6 7.1L12 17.2 6.6 21l1.6-7.1L3 9.3l6.6-.4z"/></svg><span data-i="tier">SILVER</span></span>
+    </div>
+    <div class="cfoot">
+      <div>
+        <div class="mname">Koo Ching Yee</div>
+        <div class="bal" id="bal">0</div>
+        <div class="ballbl" data-i="points">points</div>
+      </div>
+      <div>
+        <div class="mqr" id="mqr"></div>
+        <div class="qrhint" data-i="qrhint">show to earn</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="slbl" data-i="sprog">Your journey</div>
+    <div class="prog">
+      <div class="pcopy" id="pcopy">You're <b>120 points</b> from Gold ✦</div>
+      <div class="pbar"><i id="pfill"></i></div>
+      <div class="prow"><span class="cur">SILVER</span><span>GOLD · 500</span></div>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="slbl" data-i="srw">Rewards</div>
+    <div class="rwgrid" id="rwgrid"></div>
+  </div>
+
+  <div class="sect">
+    <div class="slbl" data-i="shist">History</div>
+    <div class="hist" id="hist"></div>
+  </div>
+
+  <div class="foot" data-i="foot">Kopi Corner Membership · Powered by [platform]<br>Privacy notice (BM/EN) · Protected under PDPA</div>
+</div>
+
+<div id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="sheet">
+    <div class="shlbl" data-i="showstaff">Show this to staff</div>
+    <div class="shname" id="mrn"></div>
+    <div class="shsub" id="mrs"></div>
+    <div class="shqr" id="mqr2"></div>
+    <div class="shcd"><svg class="ic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><b id="cdv">60</b>s · <span data-i="onetime">one-time code</span></span></div>
+    <button class="shcancel" onclick="closeModal()" data-i="cancel">Cancel</button>
+  </div>
+</div>
+
+<div class="tag">PROTOTYPE · ATELIER</div>
+
+<script>
+/* fake QR */
+function qrSVG(size,seed){
+  let cells='';let s=seed;
+  for(let y=0;y<21;y++)for(let x=0;x<21;x++){
+    if((x<7&&y<7)||(x>13&&y<7)||(x<7&&y>13))continue;
+    s=(s*73+13)%97; if(s%2)cells+=`<rect x="${x}" y="${y}" width="1" height="1"/>`;
+  }
+  const f=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="none" stroke="#17181C" stroke-width="1.4"/><rect x="${x+2}" y="${y+2}" width="3" height="3"/>`;
+  return `<svg width="${size}" height="${size}" viewBox="-1 -1 23 23" fill="#17181C">${f(0,0)}${f(14,0)}${f(0,14)}${cells}</svg>`;
+}
+document.getElementById('mqr').innerHTML=qrSVG(72,7);
+
+/* stroke icon set — one weight, one voice */
+const IC={
+  cup:'<path d="M5 9h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4V9z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 5.5c0-.8.7-1 .7-1.8M11.5 5.5c0-.8.7-1 .7-1.8"/>',
+  pastry:'<path d="M7 13c-2 1.2-3.6 2.6-3 4s2.6 1 4.4.2"/><path d="M17 13c2 1.2 3.6 2.6 3 4s-2.6 1-4.4.2"/><path d="M8.4 17.5c-.9-3.4.4-8 3.6-10.5 3.2 2.5 4.5 7.1 3.6 10.5-2.3 1-4.9 1-7.2 0z"/>',
+  cake:'<path d="M4 19h16"/><path d="M5 19v-5a7 7 0 0 1 14 0v5"/><path d="M5 15c1.5 1 3 .2 4-.6 1 .8 2.5 1.6 4 .6 1.3-.9 2.7-1.4 4-.4"/><path d="M12 7V5"/><path d="M12 4.5c-.6-.5-.6-1.3 0-1.8.6.5.6 1.3 0 1.8z"/>',
+  teapot:'<path d="M8 10h8a4.5 4.5 0 0 1 4.5 4.5c0 2.7-2 4.5-4.5 4.5H10c-2.5 0-4.5-1.8-4.5-4.5V12"/><path d="M5.5 12 3 9.5 6.5 8"/><path d="M9.5 10c0-2 1-3 2.5-3s2.5 1 2.5 3"/>',
+  gift:'<rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M12 10v10M4 13.5h16"/><path d="M12 10c-4 0-5-1.6-5-2.8C7 5.9 8 5 9.2 5 11 5 12 7.5 12 10zm0 0c4 0 5-1.6 5-2.8C17 5.9 16 5 14.8 5 13 5 12 7.5 12 10z"/>',
+  spark:'<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
+  plus:'<path d="M12 6v12M6 12h12"/>',
+  minus:'<path d="M6 12h12"/>'
+};
+const icon=(k,sz=18)=>`<svg class="ic" width="${sz}" height="${sz}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${IC[k]}</svg>`;
+
+/* i18n — ritual copy */
+const I18N={
+  en:{tier:'SILVER',points:'points',qrhint:'show to earn',sprog:'Your journey',srw:'Rewards',shist:'History',
+      pcopy:(n)=>`You're <b>${n} points</b> from Gold ✦`,redeem:'Redeem',need:'Keep collecting',
+      showstaff:'Show this to staff',onetime:'one-time code',cancel:'Cancel',
+      foot:'Kopi Corner Membership · Powered by [platform]<br>Privacy notice (BM/EN) · Protected under PDPA',
+      h1:'Visit at Kopi Corner',h2:'Redeemed · Free Kopi',h3:'Visit at Kopi Corner',sub:(c)=>`− ${c} points · valid at the counter`},
+  zh:{tier:'银卡',points:'积分',qrhint:'出示以积分',sprog:'您的旅程',srw:'专属奖励',shist:'记录',
+      pcopy:(n)=>`还差 <b>${n} 积分</b> 升级金卡 ✦`,redeem:'兑换',need:'继续累积',
+      showstaff:'请出示给店员',onetime:'一次性代码',cancel:'取消',
+      foot:'Kopi Corner 会员 · 技术支持 [platform]<br>隐私声明 (BM/EN) · 受 PDPA 保护',
+      h1:'到店 · Kopi Corner',h2:'已兑换 · 免费咖啡',h3:'到店 · Kopi Corner',sub:(c)=>`− ${c} 积分 · 柜台出示有效`},
+  bm:{tier:'PERAK',points:'mata',qrhint:'tunjuk untuk kumpul',sprog:'Perjalanan anda',srw:'Ganjaran',shist:'Sejarah',
+      pcopy:(n)=>`Anda <b>${n} mata</b> lagi ke Emas ✦`,redeem:'Tebus',need:'Terus kumpul',
+      showstaff:'Tunjukkan kepada staf',onetime:'kod sekali guna',cancel:'Batal',
+      foot:'Keahlian Kopi Corner · Dikuasakan oleh [platform]<br>Notis privasi (BM/EN) · Dilindungi PDPA',
+      h1:'Lawatan di Kopi Corner',h2:'Ditebus · Kopi Percuma',h3:'Lawatan di Kopi Corner',sub:(c)=>`− ${c} mata · sah di kaunter`}
+};
+let LANG='en';
+const BAL=380, NEXT=500;
+const REWARDS=[
+  {ic:'cup',   n:{en:'Signature Kopi, on us',zh:'招牌咖啡一杯',bm:'Kopi Signature, percuma'},c:100},
+  {ic:'pastry',n:{en:'Butter Croissant',zh:'牛油牛角包',bm:'Croissant Mentega'},c:150},
+  {ic:'cake',  n:{en:'Birthday Slice & Candle',zh:'生日蛋糕一份',bm:'Kek Hari Jadi'},c:250},
+  {ic:'teapot',n:{en:'Tea Set for Two',zh:'双人茶点套餐',bm:'Set Teh Berdua'},c:500}
+];
+
+function renderLangs(){
+  document.getElementById('langs').innerHTML=['en','zh','bm'].map(l=>
+    `<button class="${LANG===l?'on':''}" onclick="setLang('${l}')">${l==='en'?'EN':l==='zh'?'中文':'BM'}</button>`).join('');
+}
+function setLang(l){LANG=l;renderAll();}
+function renderRewards(){
+  const t=I18N[LANG];
+  document.getElementById('rwgrid').innerHTML=REWARDS.map((r,i)=>{
+    const ok=BAL>=r.c;
+    return `<div class="rw"><span class="rwic">${icon(r.ic,20)}</span>
+      <div class="rwn">${r.n[LANG]}</div>
+      <div class="rwc">${icon('spark',12)}<span>${r.c} pts</span></div>
+      <button class="rwb ${ok?'':'off'}" onclick="openModal(${i})">${ok?t.redeem:t.need}</button></div>`;
+  }).join('');
+}
+function renderHist(){
+  const t=I18N[LANG];
+  const row=(ic,tt,sub,amt,cls)=>`<div class="hi"><span class="hic">${icon(ic,15)}</span>
+    <span class="hit"><b>${tt}</b><small>${sub}</small></span><span class="amt ${cls}">${amt}</span></div>`;
+  document.getElementById('hist').innerHTML=
+    row('plus',t.h1,'Tue, 8 Jul · 2:14pm','+10','plus')+
+    row('gift',t.h2,'Sat, 5 Jul · 11:02am','−100','minus')+
+    row('plus',t.h3,'Sat, 5 Jul · 10:47am','+10','plus');
+}
+function renderStrings(){
+  const t=I18N[LANG];
+  document.querySelectorAll('[data-i]').forEach(el=>{const k=el.dataset.i;
+    if(typeof t[k]==='string')el.innerHTML=t[k];});
+  document.getElementById('pcopy').innerHTML=t.pcopy(NEXT-BAL);
+}
+function renderAll(){renderLangs();renderRewards();renderHist();renderStrings();}
+
+/* count-up + progress fill (rule 7: restrained motion) */
+function countUp(){
+  const el=document.getElementById('bal');const dur=1100;const t0=performance.now();
+  function step(now){const p=Math.min(1,(now-t0)/dur);const e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(BAL*e);if(p<1)requestAnimationFrame(step);}
+  requestAnimationFrame(step);
+}
+setTimeout(()=>{document.getElementById('pfill').style.width=(BAL/NEXT*100)+'%';},300);
+
+/* redeem sheet */
+let cdTimer=null;
+function openModal(i){
+  const r=REWARDS[i];const t=I18N[LANG];
+  document.getElementById('mrn').textContent=r.n[LANG];
+  document.getElementById('mrs').textContent=t.sub(r.c);
+  document.getElementById('mqr2').innerHTML=qrSVG(150,Math.floor(Math.random()*90)+3);
+  document.getElementById('modal').classList.add('on');
+  let s=60;document.getElementById('cdv').textContent=s;
+  clearInterval(cdTimer);
+  cdTimer=setInterval(()=>{s--;document.getElementById('cdv').textContent=s;if(s<=0)closeModal();},1000);
+}
+function closeModal(){clearInterval(cdTimer);document.getElementById('modal').classList.remove('on');}
+
+renderAll();countUp();
+</script>
+</body>
+</html>
