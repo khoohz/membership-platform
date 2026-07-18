@@ -12,10 +12,10 @@ Work the **frontier**: any ticket whose blockers are all done. Clear context bet
 
 **Blocked by:** None — can start immediately.
 
-- [ ] Core schema migrated: tenants, outlets, members, points_ledger, tiers, rewards, themes — every table RLS-protected by tenant
-- [ ] A second seeded tenant cannot see the first tenant's members (verified by an automated test, not by eyeball)
-- [ ] Enrol → award → balance loop works end-to-end on the deployed URL
-- [ ] Points ledger is append-only transactions; balance is derived, never stored as a mutable counter
+- [x] Core schema migrated: tenants, outlets, members, points_ledger, tiers, rewards, themes — every table RLS-protected by tenant
+- [x] A second seeded tenant cannot see the first tenant's members (verified by an automated test, not by eyeball)
+- [x] Enrol → award → balance loop works end-to-end on the deployed URL
+- [x] Points ledger is append-only transactions; balance is derived, never stored as a mutable counter
 
 ## 2. Staff mode: scan to award
 
