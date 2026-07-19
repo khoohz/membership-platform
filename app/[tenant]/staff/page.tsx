@@ -2,7 +2,8 @@ import { cookies } from "next/headers";
 import { getTenantBySlug, earningRuleOf } from "@/lib/tenants";
 import { getMemberById, getMemberBalance } from "@/lib/members";
 import { requireStaffSession, STAFF_COOKIE } from "@/lib/staff-auth";
-import { loginWithPin, lookupByPhone, awardToMember } from "./actions";
+import { getRedemption, getReward } from "@/lib/redemptions";
+import { loginWithPin, lookupByPhone, awardToMember, confirmRedemption } from "./actions";
 import Scanner from "./Scanner";
 import RmAmountField from "./RmAmountField";
 
@@ -20,15 +21,38 @@ const ERROR_MESSAGES: Record<string, string> = {
   amount_too_small: "Amount too small to earn any points.",
 };
 
+const CLAIM_ERROR_MESSAGES: Record<string, string> = {
+  already_claimed: "Already used — this code has been redeemed before.",
+  expired: "Expired — ask the member to generate a new code.",
+  insufficient_points: "Not enough points — the member's balance has dropped below the cost.",
+  not_found: "Unknown code.",
+};
+
 export default async function StaffPage({
   params,
   searchParams,
 }: {
   params: Promise<{ tenant: string }>;
-  searchParams: Promise<{ member?: string; src?: string; awarded?: string; error?: string }>;
+  searchParams: Promise<{
+    member?: string;
+    src?: string;
+    awarded?: string;
+    error?: string;
+    redemption?: string;
+    claimed?: string;
+    claim_error?: string;
+  }>;
 }) {
   const { tenant: tenantSlug } = await params;
-  const { member: memberId, src, awarded, error } = await searchParams;
+  const {
+    member: memberId,
+    src,
+    awarded,
+    error,
+    redemption: redemptionId,
+    claimed,
+    claim_error: claimError,
+  } = await searchParams;
 
   const tenant = await getTenantBySlug(tenantSlug);
   if (!tenant) {
@@ -68,6 +92,49 @@ export default async function StaffPage({
   const rule = earningRuleOf(tenant);
   const lookupAction = lookupByPhone.bind(null, tenantSlug);
   const awardAction = awardToMember.bind(null, tenantSlug);
+
+  // Redemption confirm screen (routed here by a rdm: scan)
+  if (redemptionId) {
+    const redemption = await getRedemption(tenant.id, redemptionId);
+    const reward = redemption ? await getReward(tenant.id, redemption.reward_id) : null;
+    const voucherMember = redemption
+      ? await getMemberById(tenant.id, redemption.member_id)
+      : null;
+    const confirmAction = confirmRedemption.bind(null, tenantSlug);
+
+    return (
+      <main>
+        <h1>{tenant.name} — Staff</h1>
+        {!redemption || !reward ? (
+          <p>{CLAIM_ERROR_MESSAGES.not_found}</p>
+        ) : (
+          <>
+            {/* Reward name large: staff eyeball check against what the member sees */}
+            <h2 style={{ fontSize: 42 }}>{reward.name}</h2>
+            <p>
+              {reward.points_cost} points — member{" "}
+              {voucherMember ? maskPhone(voucherMember.phone) : "?"}
+            </p>
+            {claimed && (
+              <p>
+                <strong>Redeemed ✓ — give the customer: {reward.name}</strong>
+              </p>
+            )}
+            {claimError && <p>{CLAIM_ERROR_MESSAGES[claimError] ?? "Could not redeem."}</p>}
+            {!claimed && !claimError && (
+              <form action={confirmAction}>
+                <input type="hidden" name="redemptionId" value={redemption.id} />
+                <button type="submit">Confirm redemption</button>
+              </form>
+            )}
+          </>
+        )}
+        <p>
+          <a href={`/${tenantSlug}/staff`}>← Back to scan</a>
+        </p>
+      </main>
+    );
+  }
 
   let member = null;
   let balance: number | null = null;

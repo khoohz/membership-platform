@@ -14,3 +14,10 @@ select id, 'Main Outlet' from new_tenant;
 
 insert into themes (tenant_id, theme_key)
 select id, 'atelier' from tenants where slug = 'demo-cafe';
+
+-- Demo rewards (rewards management UI is ticket 11; these make redemption demoable).
+insert into rewards (tenant_id, name, points_cost)
+select id, r.name, r.points_cost
+from tenants,
+  (values ('Free Kopi', 30), ('Free Latte', 50), ('RM5 Off', 80)) as r (name, points_cost)
+where slug = 'demo-cafe';

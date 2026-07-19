@@ -8,6 +8,7 @@ import { findMemberByPhone, getMemberById } from "@/lib/members";
 import { awardPoints } from "@/lib/points";
 import { pointsForSpend } from "@/lib/earning";
 import { checkPinAndMintSession, requireStaffSession, STAFF_COOKIE } from "@/lib/staff-auth";
+import { claimRedemption } from "@/lib/redemptions";
 
 export async function loginWithPin(tenantSlug: string, formData: FormData) {
   const pin = String(formData.get("pin") ?? "").trim();
@@ -94,4 +95,24 @@ export async function awardToMember(tenantSlug: string, formData: FormData) {
   });
 
   redirect(`/${tenantSlug}/staff?member=${member.id}&awarded=${delta}`);
+}
+
+export async function confirmRedemption(tenantSlug: string, formData: FormData) {
+  const redemptionId = String(formData.get("redemptionId") ?? "");
+
+  const tenant = await getTenantBySlug(tenantSlug);
+  if (!tenant) return;
+
+  const cookieStore = await cookies();
+  const session = requireStaffSession(cookieStore.get(STAFF_COOKIE)?.value, tenant.id);
+  if (!session) redirect(`/${tenantSlug}/staff?error=session`);
+
+  // Atomic claim: deduct + mark used + log in one DB transaction. All failure
+  // modes (already used / expired / insufficient points) come back as values.
+  const result = await claimRedemption(tenant.id, redemptionId, session.outletId);
+
+  if (!result.ok) {
+    redirect(`/${tenantSlug}/staff?redemption=${redemptionId}&claim_error=${result.error}`);
+  }
+  redirect(`/${tenantSlug}/staff?redemption=${redemptionId}&claimed=1`);
 }

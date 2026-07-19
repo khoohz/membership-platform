@@ -4,11 +4,10 @@ Tracer-bullet build roadmap for the Malaysia self-serve membership SaaS. Source 
 
 Work the **frontier**: any ticket whose blockers are all done. Clear context between tickets.
 
-**External clocks — start on day 1, independent of any ticket.** These run on other people's timelines (founder action, not a build session), so fire them early and track them here:
+**External clocks (revised 18 Jul 2026).** Ticket 7 builds against **Meta's free test number, unverified** — no business verification needed to develop and demo the WhatsApp rail (test numbers send to a small allowlist of recipient numbers). The registration chain — **SSM business registration → Meta business verification → Stripe account activation** — is deferred as a single **"launch decision" gate that must clear before ticket 14** (production WhatsApp number + Stripe live mode both need a registered business). Remaining independent clock:
 
-- [ ] Meta business verification started (business.facebook.com → Security Centre) — gates ticket 7's template approval
-- [ ] Stripe account activation started (dashboard.stripe.com → Activate account) — gates ticket 10's live mode
 - [ ] Lawyer engaged for DPA + bilingual notices review (~RM2–5k, the only planned cash spend) — gates ticket 9's final copy
+- [ ] **Launch decision gate (before ticket 14):** SSM registration → Meta business verification → Stripe activation, fired together when committing to launch
 
 ## 1. Walking skeleton: one tenant, one member, one point
 
@@ -40,9 +39,9 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 
 **Blocked by:** 2.
 
-- [ ] Redemption QR is single-use: a screenshot scanned twice fails the second time
-- [ ] Expired (60s) codes fail with a clear message; member can regenerate
-- [ ] Deduction is one atomic ledger transaction; history shows the redemption
+- [x] Redemption QR is single-use: a screenshot scanned twice fails the second time
+- [x] Expired (60s) codes fail with a clear message; member can regenerate
+- [x] Deduction is one atomic ledger transaction; history shows the redemption
 
 ## 4. Theme engine + Atelier
 
@@ -80,7 +79,7 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 
 **What to build:** Platform-owned WhatsApp number on Meta Cloud API (no BSP): send the login-link template and the ghost-member invite template, receive webhooks, meter per-tenant monthly message counts against plan quotas. All messaging behind one internal interface so a BSP could be swapped in later.
 
-**Blocked by:** 1. (Template approval additionally gated by the day-1 Meta verification external clock.)
+**Blocked by:** 1. (Builds on Meta's free test number, unverified — recipients limited to a small allowlist until the pre-14 launch-decision gate clears business verification; production number swap is part of ticket 14.)
 
 - [ ] Login-link and ghost-invite templates approved and sending to a real Malaysian number
 - [ ] Quota meter increments per tenant; over-quota behaviour defined (block + prompt top-up)
@@ -89,6 +88,8 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 ## 8. Phone login + ghost-member capture
 
 **What to build:** The two identity flows: a returning member types their phone on the portal and receives a WhatsApp login link that opens a signed session; a cashier types a phone number in staff mode at peak hour, points bank to a ghost member, and one WhatsApp invite is sent for later claiming.
+
+**Security note (recorded 18 Jul 2026, during ticket 3):** this ticket closes the **voucher-impersonation gap** — until signed member sessions exist, anyone who knows a phone number can open that member's portal and generate redemption vouchers (claiming still requires an in-person staff PIN scan, so points can't be drained remotely, but a walk-in impersonator is possible). Acceptable for demo tenants only: **this ticket must ship before any real tenant onboards.**
 
 **Blocked by:** 5, 7.
 
@@ -110,7 +111,7 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 
 **What to build:** Tenant signup starts a 30-day no-card trial; at conversion, Starter (RM299) / Growth (RM399) checkout with cards + FPX, annual = 2 months free, a founding-tenant RM199-for-life coupon capped at 10 redemptions, basic dunning, and plan gates enforced (outlets, themes, message quota).
 
-**Blocked by:** 6. (Live mode gated by the day-1 Stripe activation external clock.)
+**Blocked by:** 6. (Builds entirely in Stripe test mode; live mode gated by the pre-14 launch-decision gate — SSM registration → Stripe activation.)
 
 - [ ] Trial expiry locks admin actions gracefully (data safe, portal stays live) until payment
 - [ ] Verify FPX-recurring support during build; if gapped, fall back to card auto-renew + FPX manual annual
@@ -119,6 +120,8 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 ## 11. Admin CMS + retention insights
 
 **What to build:** The tenant's daily home: dashboard, the retention insights panel (repeat-visit rate, 30-day actives, new vs returning monthly, avg visits/member, top redeemed rewards — all derived from the ledger), member management (search by phone, view/adjust with audit trail), rewards & tiers editor, theme picker, WhatsApp-support button, message-quota meter, member-count tracker for the PDPA DPO threshold.
+
+**Rewards editor constraint (recorded 18 Jul 2026, during ticket 3):** rewards must be **archived, never deleted** — redeemed rewards are referenced by `redemptions` with `ON DELETE RESTRICT`, so deleting a reward with redemption history will fail at the database (by design: history integrity). The editor needs an `archived`/`active` flag to hide a reward from the portal instead.
 
 **Blocked by:** 3.
 

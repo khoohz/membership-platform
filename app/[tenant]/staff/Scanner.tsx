@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import QrScanner from "qr-scanner";
-import { parseMemberQrPayload } from "@/lib/member-qr";
+import { parseQrPayload } from "@/lib/member-qr";
 
-// Camera QR scanning via getUserMedia (spec section 8). If the camera is denied or
-// unavailable, the phone-number fallback form (always rendered below on the page)
-// is the path -- this component just reports why the camera isn't running.
+// Camera QR scanning via getUserMedia (spec section 8). Routes by payload type:
+// mem: -> award confirm, rdm: -> redemption confirm; anything else is ignored.
+// If the camera is denied or unavailable, the phone-number fallback form (always
+// rendered below on the page) is the path -- this component just reports why the
+// camera isn't running.
 
 export default function Scanner({ tenantSlug }: { tenantSlug: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -21,10 +23,14 @@ export default function Scanner({ tenantSlug }: { tenantSlug: string }) {
     const scanner = new QrScanner(
       videoRef.current,
       (result) => {
-        const memberId = parseMemberQrPayload(result.data);
-        if (memberId) {
+        const parsed = parseQrPayload(result.data);
+        if (parsed) {
           scanner.stop();
-          router.push(`/${tenantSlug}/staff?member=${memberId}&src=scan`);
+          router.push(
+            parsed.type === "member"
+              ? `/${tenantSlug}/staff?member=${parsed.id}&src=scan`
+              : `/${tenantSlug}/staff?redemption=${parsed.id}`,
+          );
         }
       },
       { returnDetailedScanResult: true, preferredCamera: "environment" },

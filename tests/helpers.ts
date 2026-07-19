@@ -30,9 +30,25 @@ export async function createTestTenant(slugPrefix: string) {
   return { tenant, outlet };
 }
 
+export async function createTestReward(
+  tenantId: string,
+  name: string,
+  pointsCost: number,
+) {
+  const { data, error } = await supabaseAdmin
+    .from("rewards")
+    .insert({ tenant_id: tenantId, name, points_cost: pointsCost })
+    .select("id, name, points_cost")
+    .single();
+  if (error) throw error;
+  return data;
+}
+
+// Best-effort: a test tenant with ledger rows CANNOT be deleted by the app role --
+// points_ledger DELETE is revoked (append-only by design) and outlets are
+// FK-restricted by ledger rows, which blocks the tenant cascade. Those tenants
+// linger in the local db until the next `supabase db reset`; that's accepted, and
+// the random per-run slugs keep them from interfering with anything.
 export async function deleteTestTenant(tenantId: string) {
-  // Ledger rows carry ON DELETE RESTRICT on outlet_id, so clear them before the
-  // cascade deletes the outlet. tenants/outlets/members all cascade otherwise.
-  await supabaseAdmin.from("points_ledger").delete().eq("tenant_id", tenantId);
   await supabaseAdmin.from("tenants").delete().eq("id", tenantId);
 }
