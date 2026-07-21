@@ -1,0 +1,746 @@
+/* Member portal — themed entirely through CSS variables set by the theme engine
+   (lib/themes) plus two layout-slot attributes: data-hero (material|editorial) on the
+   card and data-rewards (grid|list) on the rewards container. No theme-specific class
+   names: swapping themes.theme_key restyles all of this with no code change. */
+
+.shell {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 18px 18px 56px;
+  min-height: 100dvh;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* topbar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.tenant {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 15.5px;
+  letter-spacing: -0.2px;
+}
+.tenantLogo {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  border: var(--border-w, 1px) solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand);
+  overflow: hidden;
+  flex: none;
+}
+.tenantLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* enrol / lookup form */
+.enrol {
+  background: var(--surface-2);
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-panel);
+  padding: 18px;
+  box-shadow: var(--shadow-card);
+}
+.enrolLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: var(--label-spacing);
+  text-transform: var(--label-transform);
+  color: var(--ink-faint);
+  margin-bottom: 10px;
+}
+.field {
+  display: flex;
+  gap: 8px;
+}
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  padding: 0 14px;
+  border-radius: var(--r-pill);
+  border: var(--border-w, 1px) solid var(--hairline);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 16px;
+}
+.input::placeholder {
+  color: var(--ink-faint);
+}
+.input:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}
+.primaryBtn {
+  height: 46px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--surface-2);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  transition: transform 0.08s ease;
+}
+.primaryBtn:active {
+  transform: var(--press-transform, scale(0.97));
+}
+.notice {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+/* ===== hero card ===== */
+.card {
+  position: relative;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  color: var(--hero-ink);
+  min-height: 236px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--hero-bg);
+  box-shadow: var(--shadow-hero);
+}
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--hero-grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+}
+/* editorial hero: a hard hairline frame instead of layered depth */
+.card[data-hero="editorial"] {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+/* press hero: a pressed ink slab -- real rule around the block, hard offset shadow
+   (from --shadow-hero), and the display set loud. */
+.card[data-hero="press"] {
+  border: var(--border-w) solid var(--hairline);
+  min-height: 250px;
+}
+.card[data-hero="press"] .cardBrandName {
+  text-transform: uppercase;
+  letter-spacing: -0.2px;
+  font-weight: 800;
+  font-size: 17px;
+}
+.card[data-hero="press"] .memberQr {
+  border: var(--border-w) solid var(--hairline);
+  border-radius: var(--r-chip);
+  box-shadow: none;
+}
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+.cardBrand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.cardLogo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-pill);
+  background: var(--hero-logo-bg);
+  border: 1px solid var(--hero-logo-border);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--hero-ink);
+  overflow: hidden;
+  flex: none;
+}
+.cardLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cardBrandName {
+  font-family: var(--font-display), serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.cardBrandSub {
+  font-family: var(--font-label), sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 2.2px;
+  opacity: 0.6;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.card[data-hero="editorial"] .cardBrandName {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+.cardFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+.memberName {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  opacity: 0.82;
+}
+.balance {
+  font-family: var(--font-display), serif;
+  font-size: var(--balance-size, 52px);
+  font-weight: var(--balance-weight);
+  line-height: 0.9;
+  letter-spacing: var(--balance-tracking, -1.5px);
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.balanceLabel {
+  font-family: var(--font-label), sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-top: 7px;
+}
+.memberQr {
+  background: #fcfbf7;
+  border-radius: 14px;
+  padding: 8px;
+  line-height: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+}
+.memberQr svg {
+  width: 72px;
+  height: 72px;
+}
+.qrHint {
+  /* Taken out of flow so the QR image itself is the button's box and can be centered
+     against the balance; the hint sits just below the QR without pushing it up. */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 7px;
+  font-family: var(--font-label), sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0.6;
+}
+
+/* sections */
+.section {
+  margin-top: 26px;
+}
+.sectionLabel {
+  font-family: var(--font-label), sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: var(--label-spacing);
+  text-transform: var(--label-transform);
+  color: var(--ink-faint);
+  margin-bottom: 12px;
+}
+
+/* rewards */
+.rewards[data-rewards="grid"] {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.rewards[data-rewards="list"] {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.reward {
+  background: var(--surface-2);
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-panel);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  gap: 10px;
+}
+.rewards[data-rewards="grid"] .reward {
+  flex-direction: column;
+}
+.rewards[data-rewards="list"] .reward {
+  flex-direction: row;
+  align-items: center;
+}
+.rewardIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-chip);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-inset);
+  color: var(--brand);
+  border: var(--border-w, 1px) solid var(--hairline);
+  flex: none;
+}
+.rewardBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.rewards[data-rewards="list"] .rewardBody {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.rewardName {
+  font-size: var(--reward-name-size, 13.5px);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.1px;
+}
+.rewardCost {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-label), sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.rewardCost svg {
+  color: var(--accent);
+}
+.rewardBtn {
+  border: none;
+  border-radius: var(--r-pill);
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  background: var(--ink);
+  color: var(--surface-2);
+  letter-spacing: 0.2px;
+  transition: transform 0.08s ease;
+  white-space: nowrap;
+}
+.rewards[data-rewards="grid"] .rewardBtn {
+  width: 100%;
+}
+.rewardBtn:active {
+  transform: var(--press-transform, scale(0.96));
+}
+.rewardBtn:disabled {
+  background: var(--surface-inset);
+  color: var(--ink-faint);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* history */
+.history {
+  background: var(--surface-2);
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-panel);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.historyRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+/* Every row rules off from the one above; the first row in the card has none.
+   Using a top rule on each row (rather than adjacency) keeps clean separators even
+   across the <details> boundary where the expandable rows live in a nested element. */
+.historyRow {
+  border-top: var(--border-w, 1px) solid var(--hairline);
+}
+.history > .historyRow:first-child {
+  border-top: none;
+}
+/* Collapsible tail: animate the grid row track 0fr -> 1fr for a smooth height
+   reveal with no fixed pixel height. The inner wrapper clips during the transition. */
+.historyCollapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.22, 0.8, 0.3, 1);
+}
+.historyCollapse[data-open] {
+  grid-template-rows: 1fr;
+}
+.historyCollapseInner {
+  overflow: hidden;
+  min-height: 0;
+}
+.historyCollapseInner > .historyRow:first-child {
+  border-top: var(--border-w, 1px) solid var(--hairline);
+}
+/* The toggle renders after the collapsible region, so it is always the last row. */
+.historyMoreToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 13px 16px;
+  min-height: 44px;
+  cursor: pointer;
+  border: none;
+  border-top: var(--border-w, 1px) solid var(--hairline);
+  background: none;
+  font-family: var(--font-label), sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.historyMoreChevron {
+  transition: transform 0.3s ease;
+}
+.historyMoreChevron[data-open] {
+  transform: rotate(180deg);
+}
+.historyIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-pill);
+  background: var(--surface-inset);
+  border: var(--border-w, 1px) solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-muted);
+  flex: none;
+}
+.historyText {
+  flex: 1;
+  min-width: 0;
+}
+.historyText b {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+}
+.historyText small {
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+.amount {
+  font-weight: 800;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+.amountPlus {
+  color: var(--brand);
+}
+.amountMinus {
+  color: var(--accent);
+}
+
+.empty {
+  color: var(--ink-muted);
+  font-size: 13px;
+  padding: 4px 2px;
+}
+
+.footer {
+  text-align: center;
+  font-size: 10px;
+  color: var(--ink-faint);
+  margin-top: 28px;
+  line-height: 1.7;
+  letter-spacing: 0.2px;
+}
+
+/* ===== voucher (redeem) page ===== */
+.voucherWrap {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 32px 22px 56px;
+  min-height: 100dvh;
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  text-align: center;
+}
+.voucherLabel {
+  font-family: var(--font-label), sans-serif;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: var(--label-spacing);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.voucherName {
+  font-family: var(--font-display), serif;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin: 10px 0 4px;
+  line-height: 1.1;
+}
+.voucherSub {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 22px;
+}
+.voucherQr {
+  display: inline-block;
+  background: #fff;
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-panel);
+  padding: 16px;
+  line-height: 0;
+  box-shadow: var(--shadow-card);
+}
+.voucherCountdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 16px;
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+.voucherState {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 16px 0;
+  color: var(--ink);
+}
+.backLink {
+  display: inline-block;
+  margin-top: 22px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-faint);
+}
+
+/* ===== member QR: tappable, opens an enlarged centered modal ===== */
+.memberQrBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  display: block;
+  position: relative;
+  text-align: center;
+  color: inherit;
+  transition: transform 0.12s ease;
+}
+.memberQrBtn:active {
+  transform: scale(0.96);
+}
+.memberQrBtn .memberQr {
+  display: block;
+}
+.memberQrBtn:focus-visible {
+  outline: 2px solid var(--hero-ink);
+  outline-offset: 4px;
+  border-radius: var(--r-chip);
+}
+
+/* Centered dialog: the enlarged member code. The dialog fills the viewport and
+   flex-centers its panel -- reliable vertical centering on iOS Safari, where the
+   UA default dialog centering drifts to the top. */
+.qrDialog {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: none;
+  padding: 0;
+  background: none;
+  color: var(--ink);
+}
+.qrDialog[open] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.qrDialog::backdrop {
+  background: rgba(17, 18, 20, 0.5);
+  backdrop-filter: blur(6px);
+  animation: backdropIn 0.24s ease both;
+}
+.qrDialog[data-closing]::backdrop {
+  animation: backdropOut 0.2s ease forwards;
+}
+.qrDialogPanel {
+  width: min(92vw, 380px);
+  background: var(--surface);
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-card);
+  box-shadow: var(--shadow-card);
+  padding: 26px 22px 24px;
+  text-align: center;
+  animation: qrIn 0.24s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+.qrDialog[data-closing] .qrDialogPanel {
+  animation: qrOut 0.2s ease forwards;
+}
+.qrDialogCode {
+  background: #fff;
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-panel);
+  padding: 16px;
+  margin: 14px 0 6px;
+  line-height: 0;
+}
+.qrDialogCode svg {
+  width: 100%;
+  height: auto;
+}
+@keyframes qrIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes qrOut {
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+@keyframes backdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes backdropOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ===== voucher: bottom drawer (vaul) ===== */
+/* vaul owns the transform/transition for slide + drag; we only provide the visuals.
+   The overlay and panel are portaled to <body>, so the panel carries the resolved
+   theme variables via an inline style (see VoucherSheet). */
+.sheetOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(17, 18, 20, 0.5);
+  backdrop-filter: blur(6px);
+}
+
+/* vaul closes with a 0.5s decelerate curve whose long tail keeps the panel's last
+   sliver and the backdrop partially visible until ~470ms -- it reads as a slow
+   fade-out. Override ONLY the closing phase (data-state="closed") with a quick
+   accelerate-out so everything slides off and clears together, with no tail. The
+   open animation and 1:1 finger-drag (data-state="open") are left untouched.
+   :global keeps these vaul attribute selectors unscoped by CSS Modules. */
+:global([data-vaul-drawer][data-state="closed"]) {
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1) !important;
+  transition-duration: 0.26s !important;
+}
+:global([data-vaul-overlay][data-state="closed"]) {
+  transition-timing-function: cubic-bezier(0.4, 0, 1, 1) !important;
+  transition-duration: 0.2s !important;
+}
+.sheetPanel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 61;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 460px;
+  max-height: 92dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: var(--surface);
+  color: var(--ink);
+  border-top: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-card) var(--r-card) 0 0;
+  padding: 10px 22px 32px;
+  text-align: center;
+  outline: none;
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+.sheetBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* vaul's Handle is the drag affordance; restyle it to a subtle grip on-theme. */
+.sheetGrip {
+  width: 42px !important;
+  height: 4px !important;
+  border-radius: 999px !important;
+  background: var(--hairline) !important;
+  margin: 0 auto 14px !important;
+}
+.sheetClose {
+  margin-top: 18px;
+  padding: 12px 26px;
+  min-height: 44px;
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-faint);
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

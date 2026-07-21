@@ -12,8 +12,12 @@ with new_tenant as (
 insert into outlets (tenant_id, name)
 select id, 'Main Outlet' from new_tenant;
 
-insert into themes (tenant_id, theme_key)
-select id, 'atelier' from tenants where slug = 'demo-cafe';
+-- Theme selection + brand inputs (ticket 4 renders these). brand_color is a deep
+-- green distinct from the theme's own default, so the crafted hero material is
+-- visibly data-driven. No logo/cover set: the theme's fallbacks (initial glyph +
+-- crafted material) render instead. Switch theme/brand with scripts/set-theme.ts.
+insert into themes (tenant_id, theme_key, brand_color)
+select id, 'press', '#1F4D3D' from tenants where slug = 'demo-cafe';
 
 -- Demo rewards (rewards management UI is ticket 11; these make redemption demoable).
 insert into rewards (tenant_id, name, points_cost)

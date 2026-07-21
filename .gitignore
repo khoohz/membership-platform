@@ -41,8 +41,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# claude code local settings
+# claude code local settings + vendored skills (local tooling, not app code)
 .claude/settings.local.json
+.claude/skills/
 
 # supabase local dev
 /supabase/.branches

@@ -49,9 +49,9 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 
 **Blocked by:** 1.
 
-- [ ] Tenant brand inputs (logo, color, cover image with crafted fallback material) render inside the theme
-- [ ] A second theme stub proves the architecture (switching themes = data change only)
-- [ ] No emoji anywhere in UI; one stroke-icon set; type scale per the Atelier prototype
+- [x] Tenant brand inputs (logo, color, cover image with crafted fallback material) render inside the theme
+- [x] A second theme stub proves the architecture (switching themes = data change only)
+- [x] No emoji anywhere in UI; one stroke-icon set; type scale per the Atelier prototype
 
 ## 5. Member portal, complete
 
@@ -59,10 +59,13 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 
 **Phone input (decided 18 Jul 2026, during ticket 2):** member phone fields use a fixed `+60` prefix with local-number entry (user types `12-345 6789` / `11-2345 6789`), `tel` keyboard, and light client-side Malaysian-mobile validation (`01x`, allowing 011's extra digit). Client validation is UX only — server normalization (`lib/phone.ts`) stays authoritative. MVP accepts Malaysian mobiles exclusively; international numbers are on the spec's deferred list (§9).
 
+**Active-voucher UX (deferred here from ticket 4, 21 Jul 2026):** redeeming should (1) show a **confirmation** before generating the one-time QR, and (2) treat the live voucher as a persistent activity — its 60s QR survives closing the drawer, showing as a **minimized countdown bar pinned at the bottom** of the portal that reopens the full drawer until it expires. The data already supports this (a pending redemption persists ~60s; reopening `?voucher=<id>` shows the live countdown), so the work is mostly UI + hoisting active-voucher state to the portal level — which fits this ticket's device-session/state work. The redemption drawer itself (vaul bottom sheet, drag-to-dismiss, member-QR enlarge modal) was built in ticket 4.
+
 **Blocked by:** 3, 4.
 
 - [ ] All member-facing strings exist in all three languages; toggle persists per device
 - [ ] Layout matches spec §2.5 (hero card → progress → rewards → history)
+- [ ] Redeem confirms first; active voucher persists as a minimized countdown bar and reopens until expiry
 - [ ] Lighthouse mobile performance ≥ 90 on the portal (it's the most-loaded page in the product)
 
 ## 6. Setup wizard

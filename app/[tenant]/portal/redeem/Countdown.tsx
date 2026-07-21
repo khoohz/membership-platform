@@ -37,8 +37,8 @@ export default function Countdown({ expiresAt }: { expiresAt: string }) {
   }, [router]);
 
   return (
-    <p>
-      Valid for <strong>{secondsLeft}</strong> more second{secondsLeft === 1 ? "" : "s"}
-    </p>
+    <span>
+      Valid <strong>{secondsLeft}s</strong>
+    </span>
   );
 }

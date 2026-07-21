@@ -114,7 +114,7 @@ export type HistoryEntry = {
 export async function getMemberHistory(
   tenantId: string,
   memberId: string,
-  limit = 10,
+  limit = 50,
 ): Promise<HistoryEntry[]> {
   const { data, error } = await supabaseAdmin
     .from("points_ledger")
