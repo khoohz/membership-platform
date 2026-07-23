@@ -294,7 +294,7 @@ async function RewardsList({
                 phone={phone}
                 rewardId={reward.id}
                 disabled={!affordable}
-                label={affordable ? "Redeem" : `Need ${reward.points_cost - balance}`}
+                label="Redeem"
                 className={styles.rewardBtn}
               />
             </div>

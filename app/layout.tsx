@@ -5,6 +5,8 @@ import {
   Space_Grotesk,
   JetBrains_Mono,
   Bricolage_Grotesque,
+  Baloo_2,
+  Nunito,
 } from "next/font/google";
 import "./globals.css";
 
@@ -35,6 +37,18 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
   display: "swap",
 });
+const baloo = Baloo_2({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-baloo",
+  display: "swap",
+});
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+  variable: "--font-nunito",
+  display: "swap",
+});
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   weight: ["600", "700", "800"],
@@ -52,7 +66,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const fontVars = [fraunces, jakarta, spaceGrotesk, jetbrainsMono, bricolage]
+  const fontVars = [fraunces, jakarta, spaceGrotesk, jetbrainsMono, bricolage, baloo, nunito]
     .map((f) => f.variable)
     .join(" ");
   return (

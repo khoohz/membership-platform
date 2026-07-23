@@ -4,9 +4,10 @@ import type { BrandInputs, ResolvedTheme, ThemeDefinition } from "./types";
 import { velvet } from "./velvet";
 import { nocturne } from "./nocturne";
 import { press } from "./press";
+import { taffy } from "./taffy";
 
 export type { ResolvedTheme } from "./types";
-export { velvet, nocturne, press };
+export { velvet, nocturne, press, taffy };
 
 // The code-level theme catalog. theme_key on the DB row selects one; an unknown key
 // falls back to the flagship. Adding a theme = adding an entry here (code); switching
@@ -15,6 +16,7 @@ const CATALOG: Record<string, ThemeDefinition> = {
   [press.key]: press,
   [velvet.key]: velvet,
   [nocturne.key]: nocturne,
+  [taffy.key]: taffy,
 };
 
 // Retired keys kept resolvable so existing tenant rows never render a wrong theme.

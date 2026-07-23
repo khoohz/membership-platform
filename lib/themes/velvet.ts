@@ -1,5 +1,5 @@
 import type { ThemeDefinition } from "./types";
-import { shade, rgba } from "./color";
+import { shade, rgba, darkSlabFor } from "./color";
 
 // Velvet -- soft warm luxury. Fraunces serif display, porcelain surfaces, generous
 // radii, and a layered "material" hero card woven from the tenant's brand color with
@@ -17,19 +17,28 @@ import { shade, rgba } from "./color";
 
 const GOLD = "#B8862F";
 
+// Contrast-resolved hero pair (see press.ts): a pale or yellow brand previously got
+// fixed cream ink at ~1.3:1 -- effectively invisible.
+const HERO_INK = "#FDFCF9";
+function heroSlab(brand: string) {
+  return { slab: darkSlabFor(brand, HERO_INK), ink: HERO_INK, usedLightInk: true };
+}
+
 export const velvet: ThemeDefinition = {
   key: "velvet",
   name: "Velvet",
   defaultBrandColor: "#0F6B5C",
   slots: { hero: "material", rewards: "grid" },
 
-  craftedMaterial: (brand: string) =>
-    [
+  craftedMaterial: (rawBrand: string) => {
+    const { slab: brand } = heroSlab(rawBrand);
+    return [
       `radial-gradient(120% 90% at 85% -10%, ${rgba("#E8C27A", 0.5)}, transparent 55%)`,
       `radial-gradient(90% 70% at 12% 110%, ${rgba(shade(brand, -0.65), 0.85)}, transparent 70%)`,
       `radial-gradient(140% 120% at 60% 40%, ${rgba(brand, 0.35)}, transparent 70%)`,
       `linear-gradient(150deg, ${shade(brand, -0.5)} 0%, ${brand} 46%, ${shade(brand, -0.4)} 100%)`,
-    ].join(", "),
+    ].join(", ");
+  },
 
   cssVars: ({ brand, heroBackground }) => ({
     "--font-display": "var(--font-fraunces)",
@@ -43,7 +52,7 @@ export const velvet: ThemeDefinition = {
     "--ink-muted": "#54504A",
     // Darkened from the old #A09C93: section labels and timestamps now hold real
     // contrast on porcelain instead of fading out.
-    "--ink-faint": "#807A70",
+    "--ink-faint": "#6E6960",
     "--hairline": "#E5E0D6",
 
     "--brand": brand,
@@ -51,11 +60,13 @@ export const velvet: ThemeDefinition = {
     "--accent-ink": "#171512",
 
     "--hero-bg": heroBackground,
-    "--hero-ink": "#FDFCF9",
-    "--hero-ink-muted": "rgba(253, 252, 249, 0.7)",
+    "--hero-ink": heroSlab(brand).ink,
+    "--hero-ink-muted": heroSlab(brand).usedLightInk
+      ? "rgba(253, 252, 249, 0.7)"
+      : "rgba(23, 21, 18, 0.66)",
     "--hero-grain": "0.14",
-    "--hero-logo-bg": "rgba(253, 252, 249, 0.16)",
-    "--hero-logo-border": "rgba(253, 252, 249, 0.32)",
+    "--hero-logo-bg": heroSlab(brand).usedLightInk ? "rgba(253, 252, 249, 0.16)" : "rgba(23, 21, 18, 0.10)",
+    "--hero-logo-border": heroSlab(brand).ink,
 
     // Softer and rounder than either sibling theme.
     "--r-card": "30px",

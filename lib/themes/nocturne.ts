@@ -1,10 +1,16 @@
 import type { ThemeDefinition } from "./types";
-import { shade, rgba } from "./color";
+import { shade, rgba, darkSlabFor } from "./color";
 
 // Nocturne — dark editorial. Space Grotesk display, JetBrains Mono labels, a flat
 // high-contrast hero (no grain, single brand wash), rewards as a full-width list.
 // Deliberately structurally different from Atelier so that a theme swap proves the
 // engine handles fonts, surfaces, hero treatment, and layout slots as pure data.
+
+// Contrast-resolved hero pair (see press.ts).
+const HERO_INK = "#FAFAFA";
+function heroSlab(brand: string) {
+  return { slab: darkSlabFor(brand, HERO_INK), ink: HERO_INK, usedLightInk: true };
+}
 
 export const nocturne: ThemeDefinition = {
   key: "nocturne",
@@ -12,12 +18,14 @@ export const nocturne: ThemeDefinition = {
   defaultBrandColor: "#6D5EF7",
   slots: { hero: "editorial", rewards: "list" },
 
-  craftedMaterial: (brand: string) =>
-    [
+  craftedMaterial: (rawBrand: string) => {
+    const { slab: brand } = heroSlab(rawBrand);
+    return [
       `radial-gradient(110% 80% at 100% 0%, ${rgba(brand, 0.55)}, transparent 55%)`,
       `radial-gradient(90% 90% at 0% 100%, ${rgba(shade(brand, -0.4), 0.5)}, transparent 60%)`,
       `linear-gradient(135deg, ${shade(brand, -0.35)} 0%, #0B0B0D 62%)`,
-    ].join(", "),
+    ].join(", ");
+  },
 
   cssVars: ({ brand, heroBackground }) => ({
     "--font-display": "var(--font-space-grotesk)",
@@ -29,7 +37,7 @@ export const nocturne: ThemeDefinition = {
     "--surface-inset": "#202024",
     "--ink": "#F4F4F5",
     "--ink-muted": "#A1A1AA",
-    "--ink-faint": "#6B6B72",
+    "--ink-faint": "#8C8C92",
     "--hairline": "#29292E",
 
     "--brand": brand,
@@ -37,8 +45,10 @@ export const nocturne: ThemeDefinition = {
     "--accent-ink": "#0B0B0D",
 
     "--hero-bg": heroBackground,
-    "--hero-ink": "#FAFAFA",
-    "--hero-ink-muted": "rgba(250, 250, 250, 0.58)",
+    "--hero-ink": heroSlab(brand).ink,
+    "--hero-ink-muted": heroSlab(brand).usedLightInk
+      ? "rgba(250, 250, 250, 0.58)"
+      : "rgba(11, 11, 13, 0.62)",
     "--hero-grain": "0.05",
     "--hero-logo-bg": "rgba(250, 250, 250, 0.08)",
     "--hero-logo-border": "rgba(250, 250, 250, 0.18)",

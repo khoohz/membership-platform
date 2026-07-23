@@ -16,7 +16,7 @@ import { createClient } from "@supabase/supabase-js";
 
 config({ path: path.resolve(__dirname, "../.env.local") });
 
-const KNOWN_THEMES = ["press", "velvet", "nocturne"];
+const KNOWN_THEMES = ["press", "velvet", "nocturne", "taffy"];
 
 function flag(name: string): string | undefined {
   const i = process.argv.indexOf(`--${name}`);
