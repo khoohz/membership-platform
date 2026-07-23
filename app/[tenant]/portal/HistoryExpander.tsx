@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Icon } from "@/lib/icons";
+import { t, type Locale } from "@/lib/i18n";
 import styles from "./portal.module.css";
 
 // Collapsible tail of the history list. The extra rows (server-rendered, passed as
@@ -11,9 +12,11 @@ import styles from "./portal.module.css";
 
 export default function HistoryExpander({
   count,
+  locale,
   children,
 }: {
   count: number;
+  locale: Locale;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
@@ -29,7 +32,7 @@ export default function HistoryExpander({
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
       >
-        <span>{open ? "Show less" : `Show all ${count}`}</span>
+        <span>{open ? t(locale, "showLess") : t(locale, "showAll", { count })}</span>
         <Icon
           name="chevronDown"
           size={15}

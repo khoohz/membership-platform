@@ -1,10 +1,11 @@
 import "server-only";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { getMemberBalance } from "@/lib/members";
 
-// Voucher validity window. 60s per spec section 3; a single named constant so the
-// pilot can tune it (cashier queue speed vs screenshot-hoarding risk) in one place.
-export const REDEMPTION_VALIDITY_SECONDS = 60;
+// Voucher validity window. 3 minutes (deduct-on-confirm revision, 24 Jul 2026):
+// long enough that a counter queue rarely burns the window, short enough to limit
+// screenshot-hoarding. A single named constant, passed into create_redemption so the
+// DB and UI share one source of truth.
+export const REDEMPTION_VALIDITY_SECONDS = 180;
 
 export type Redemption = {
   id: string;
@@ -43,31 +44,49 @@ export async function getReward(tenantId: string, rewardId: string): Promise<Rew
   return data;
 }
 
-// Generation-time balance check is UX-only; claim_redemption re-checks inside the
-// transaction, because points can be spent between generation and claim.
+export type CreateRedemptionError =
+  | "unknown_member"
+  | "unknown_reward"
+  | "insufficient_points"
+  | "active_voucher_exists";
+
+// Deduct-on-confirm (see migration 20260724120000): one atomic rpc that enforces
+// one-live-voucher, checks the balance, creates the voucher, and appends the deduction
+// -- points leave the moment the member confirms, not at the counter.
 export async function createRedemption(
   tenantId: string,
   memberId: string,
   rewardId: string,
-): Promise<{ ok: true; id: string } | { ok: false; error: "unknown_reward" | "insufficient_points" }> {
-  const reward = await getReward(tenantId, rewardId);
-  if (!reward) return { ok: false, error: "unknown_reward" };
+): Promise<{ ok: true; id: string } | { ok: false; error: CreateRedemptionError }> {
+  const { data, error } = await supabaseAdmin.rpc("create_redemption", {
+    p_tenant_id: tenantId,
+    p_member_id: memberId,
+    p_reward_id: rewardId,
+    p_validity_seconds: REDEMPTION_VALIDITY_SECONDS,
+  });
+  if (error) throw error;
+  return data as { ok: true; id: string } | { ok: false; error: CreateRedemptionError };
+}
 
-  const balance = await getMemberBalance(tenantId, memberId);
-  if (balance < reward.points_cost) return { ok: false, error: "insufficient_points" };
-
+// The member's one live voucher, if any (pending and not yet expired). Used to restore
+// the active-voucher bar after a reload and to block a second redemption in the UI
+// (create_redemption enforces the same rule server-side).
+export async function getActiveRedemption(
+  tenantId: string,
+  memberId: string,
+): Promise<Redemption | null> {
   const { data, error } = await supabaseAdmin
     .from("redemptions")
-    .insert({
-      tenant_id: tenantId,
-      member_id: memberId,
-      reward_id: rewardId,
-      expires_at: new Date(Date.now() + REDEMPTION_VALIDITY_SECONDS * 1000).toISOString(),
-    })
-    .select("id")
-    .single();
+    .select("id, tenant_id, member_id, reward_id, status, expires_at, created_at")
+    .eq("tenant_id", tenantId)
+    .eq("member_id", memberId)
+    .eq("status", "pending")
+    .gt("expires_at", new Date().toISOString())
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
   if (error) throw error;
-  return { ok: true, id: data.id };
+  return data;
 }
 
 export async function getRedemption(

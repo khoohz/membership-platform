@@ -20,7 +20,7 @@
 - **Enrol (idle moment):** table/counter QR → portal → enter phone number → WhatsApp login link (utility msg) → card live. Bilingual PDPA notice + consent checkbox at this screen.
 - **Enrol (peak moment):** cashier types phone in staff mode → points banked to ghost member → one WhatsApp invite → member claims later.
 - **Earn:** member shows personal QR → cashier scans in staff mode → award per tenant's rule. Earning rule is tenant-configured with custom values: **N points per visit** or **N points per RM1** (friendly "1 point per RM__" input allowed); always round down; no multipliers/bonus rules at MVP.
-- **Redeem:** member taps reward → one-time QR (reward name in big text) → cashier scans → deduct, mark used, log. In-store only; no gifting, no combining.
+- **Redeem:** member taps reward → **confirmation** → one-time QR (reward name in big text) → cashier scans → mark used, log. In-store only; no gifting, no combining. **Points are deducted at member confirm, not at the counter (revised 24 Jul 2026):** the confirm dialog is the commitment, the code is valid **3 minutes**, only **one live voucher per member** at a time, and an unclaimed/expired voucher is **not refunded** — this prevents member/staff mis-operation. Security caveat: until signed member sessions exist (ticket 8), deduct-on-confirm lets anyone who knows a phone spend that member's points remotely; acceptable for demo tenants only, closed by ticket 8. (Wayfinder: "Redeem-on-confirm".)
 - **Return:** device session; else enter phone on portal → WhatsApp login link. No passwords, no SMS OTP, no "message the cafe" path.
 
 ## 4. Themes

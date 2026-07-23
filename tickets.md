@@ -63,10 +63,10 @@ Includes **phone number normalization** — phone is the identity key (`unique (
 
 **Blocked by:** 3, 4.
 
-- [ ] All member-facing strings exist in all three languages; toggle persists per device
-- [ ] Layout matches spec §2.5 (hero card → progress → rewards → history)
-- [ ] Redeem confirms first; active voucher persists as a minimized countdown bar and reopens until expiry
-- [ ] Lighthouse mobile performance ≥ 90 on the portal (it's the most-loaded page in the product)
+- [x] All member-facing strings exist in all three languages; toggle persists per device *(EN/中文/BM dictionaries in `lib/i18n/`; completeness + placeholder-parity tested; `portal_lang` cookie, SSR-resolved so no flash)*
+- [x] Layout matches spec §2.5 (hero card → progress → rewards → history) *(tier chip on hero, journey bar with ritual copy beneath)*
+- [x] Redeem confirms first; active voucher persists as a minimized countdown bar and reopens until expiry *(confirm dialog → live QR; `ActiveVoucher` hoists state, close minimises to pinned bar, expiry tears it down)*
+- [x] Lighthouse mobile performance ≥ 90 on the portal (it's the most-loaded page in the product) *(94 on the member view; CLS 0, TBT 30ms — 23 Jul 2026)*
 
 ## 6. Setup wizard
 

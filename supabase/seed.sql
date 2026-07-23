@@ -25,3 +25,13 @@ select id, r.name, r.points_cost
 from tenants,
   (values ('Free Kopi', 30), ('Free Latte', 50), ('RM5 Off', 80)) as r (name, points_cost)
 where slug = 'demo-cafe';
+
+-- Demo tier ladder (tiers editor is ticket 11). Names are tenant-authored content, so
+-- the portal shows them as-is in every language; only the surrounding ritual/progress
+-- copy is translated. The lowest rung sits at 0 so every member has a tier. A member's
+-- tier + "N points to next" are derived from the ledger balance (lib/tier-progress.ts).
+insert into tiers (tenant_id, name, min_points)
+select id, t.name, t.min_points
+from tenants,
+  (values ('Regular', 0), ('Silver', 400), ('Gold', 1000)) as t (name, min_points)
+where slug = 'demo-cafe';

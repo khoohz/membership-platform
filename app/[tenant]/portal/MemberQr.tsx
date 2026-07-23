@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { t, type Locale } from "@/lib/i18n";
 import styles from "./portal.module.css";
 
 const EXIT_MS = 200; // must match qrOut / backdropOut CSS duration
@@ -10,7 +11,7 @@ const EXIT_MS = 200; // must match qrOut / backdropOut CSS duration
 // the phone awkwardly close. Native <dialog> gives us the focus trap, Esc-to-close,
 // and inert background for free.
 
-export default function MemberQr({ svg, hint }: { svg: string; hint: string }) {
+export default function MemberQr({ svg, locale }: { svg: string; locale: Locale }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [closing, setClosing] = useState(false);
 
@@ -34,10 +35,10 @@ export default function MemberQr({ svg, hint }: { svg: string; hint: string }) {
         type="button"
         className={styles.memberQrBtn}
         onClick={open}
-        aria-label="Enlarge my member QR code"
+        aria-label={t(locale, "memberCode")}
       >
         <span className={styles.memberQr} dangerouslySetInnerHTML={{ __html: svg }} />
-        <span className={styles.qrHint}>{hint}</span>
+        <span className={styles.qrHint}>{t(locale, "qrHint")}</span>
       </button>
 
       <dialog
@@ -53,14 +54,14 @@ export default function MemberQr({ svg, hint }: { svg: string; hint: string }) {
         }}
       >
         <div className={styles.qrDialogPanel}>
-          <div className={styles.voucherLabel}>Member code</div>
+          <div className={styles.voucherLabel}>{t(locale, "memberCode")}</div>
           <div
             className={styles.qrDialogCode}
             dangerouslySetInnerHTML={{ __html: svg }}
           />
-          <p className={styles.voucherSub}>Scan at the counter to earn points</p>
+          <p className={styles.voucherSub}>{t(locale, "scanToEarn")}</p>
           <button type="button" className={styles.primaryBtn} onClick={close}>
-            Done
+            {t(locale, "done")}
           </button>
         </div>
       </dialog>

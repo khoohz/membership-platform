@@ -665,7 +665,7 @@
 /* ===== voucher: bottom drawer (vaul) ===== */
 /* vaul owns the transform/transition for slide + drag; we only provide the visuals.
    The overlay and panel are portaled to <body>, so the panel carries the resolved
-   theme variables via an inline style (see VoucherSheet). */
+   theme variables via an inline style (see ActiveVoucher). */
 .sheetOverlay {
   position: fixed;
   inset: 0;
@@ -743,4 +743,256 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* ===== language toggle (topbar) ===== */
+.langToggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  border: var(--border-w, 1px) solid var(--hairline);
+  flex: none;
+}
+.langBtn {
+  min-width: 34px;
+  height: 28px;
+  padding: 0 8px;
+  border: none;
+  background: none;
+  border-radius: var(--r-pill);
+  font-family: var(--font-label), sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  color: var(--ink-faint);
+  transition: transform 0.08s ease;
+}
+.langBtn[data-active] {
+  background: var(--btn-bg, var(--ink));
+  color: var(--btn-ink, var(--surface-2));
+}
+.langBtn:active {
+  transform: var(--press-transform, scale(0.96));
+}
+.langBtn:disabled {
+  opacity: 0.6;
+}
+
+/* ===== tier chip (hero card) ===== */
+.tierChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--r-pill);
+  background: var(--hero-logo-bg);
+  border: 1px solid var(--hero-logo-border);
+  color: var(--hero-ink);
+  font-family: var(--font-label), sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+  flex: none;
+}
+
+/* ===== tier journey (progress) ===== */
+.journey {
+  margin-top: 16px;
+  background: var(--surface-2);
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-panel);
+  padding: 16px;
+  box-shadow: var(--shadow-card);
+}
+.journeyRitual {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.journeyTrack {
+  height: 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface-inset);
+  border: var(--border-w, 1px) solid var(--hairline);
+  overflow: hidden;
+}
+.journeyFill {
+  height: 100%;
+  min-width: 0;
+  background: var(--brand);
+  border-radius: inherit;
+  transition: width 0.6s cubic-bezier(0.22, 0.8, 0.3, 1);
+}
+.journeyEnds {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: var(--font-label), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ===== sign out (device session) ===== */
+.signOut {
+  margin-top: 10px;
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-faint);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* ===== redeem confirm dialog ===== */
+.secondaryBtn {
+  height: 46px;
+  padding: 0 18px;
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  transition: transform 0.08s ease;
+}
+.secondaryBtn:active {
+  transform: var(--press-transform, scale(0.97));
+}
+/* Three sentences, each on its own line (newline-separated in the dictionary), with
+   generous spacing so the dialog reads clearly and grows taller. */
+.confirmBody {
+  white-space: pre-line;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  margin: 12px 0 4px;
+}
+.confirmActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 22px;
+}
+.confirmActions > * {
+  flex: 1;
+}
+
+/* ===== active-voucher minimized bar (pinned) ===== */
+.voucherBar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(12px, env(safe-area-inset-bottom));
+  z-index: 55;
+  width: calc(100% - 28px);
+  max-width: 432px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: var(--border-w, 1px) solid var(--hairline);
+  border-radius: var(--r-card);
+  background: var(--surface-2);
+  color: var(--ink);
+  box-shadow: var(--shadow-hero);
+  text-align: left;
+  animation: barIn 0.3s cubic-bezier(0.22, 0.8, 0.3, 1) both;
+}
+.voucherBarIcon {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  border-radius: var(--r-pill);
+  background: var(--surface-inset);
+  border: var(--border-w, 1px) solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--brand);
+}
+.voucherBarText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.voucherBarText b {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.voucherBarText small {
+  font-family: var(--font-label), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+/* countdown block (right of the bar): "Valid for / 2m 50s" over a draining track,
+   all centred as a column; the track stretches to the block's width (the time text),
+   so the bar is as wide as "2m 50s", not a fixed length. */
+.barCountdown {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.barCountdownLabel {
+  font-family: var(--font-label), sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.barCountdownTime {
+  font-family: var(--font-label), sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.barCountdownTrack {
+  align-self: stretch;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--surface-inset);
+  overflow: hidden;
+}
+.barCountdownFill {
+  display: block;
+  height: 100%;
+  background: var(--brand);
+  border-radius: inherit;
+  transition: width 0.25s linear;
+}
+@keyframes barIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }

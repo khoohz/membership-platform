@@ -82,3 +82,21 @@ export async function getMemberBalance(
   if (error) throw error;
   return data?.balance ?? 0;
 }
+
+// Lifetime points EARNED (sum of positive ledger deltas) -- the basis for tier/status,
+// which must not drop when the member spends points on rewards. Distinct from the
+// spendable balance above: earning raises both, redeeming lowers only the balance.
+export async function getMemberEarnedTotal(
+  tenantId: string,
+  memberId: string,
+): Promise<number> {
+  const { data, error } = await supabaseAdmin
+    .from("points_ledger")
+    .select("delta")
+    .eq("tenant_id", tenantId)
+    .eq("member_id", memberId)
+    .gt("delta", 0);
+
+  if (error) throw error;
+  return (data ?? []).reduce((sum, row) => sum + row.delta, 0);
+}
